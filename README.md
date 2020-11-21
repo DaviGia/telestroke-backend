@@ -28,7 +28,7 @@ Each microservice can be configured using one or more of the following options:
 
 To see the available configuration for each specific microservice, see the file `resources/service.yml` inside each gradle module.
 
-## Distribution
+## Deployment
 
 ### Jar
 
@@ -74,7 +74,7 @@ docker-compose up -d
 
 ## Demo information
 
-The `docker-compose` is already setup to insert initial data to the database. The following table shows the available users:
+The `docker-compose` is already setup to insert initial data to the database (just for demo purpose). The following table shows the available users:
 
 |Username|Password|
 |--|--|
