@@ -12,17 +12,21 @@ The project is structured in 3 main components:
   * implements a WebRTC peer sends video and audio feed and receives audio from the specialist and receives audio from his/her
   * can display brief information about the current action that the specialist is performing from his/her device
 
-## Microservices configuration
+## Description
 
-Vert.x microservices can be configured with the environment variable: `VERTX_PROFILE`.
+Vert.x microservices architecture to manage authentication, reporting sessions, WebRTC peers and storage.
 
-Other available configuration options are:
+## Configuration
+
+Each microservice can be configured using one or more of the following options:
 
 - resources/service.yml (required)
 - resources/service-`VERTX_PROFILE`.yml
 - `workingdir`/config/*.yml
 - k8s configmap named: service-configmap
 - k8s secrets named: service-secrets
+
+To see the available configuration for each specific microservice, see the file `resources/service.yml` inside each gradle module.
 
 ## Distribution
 
