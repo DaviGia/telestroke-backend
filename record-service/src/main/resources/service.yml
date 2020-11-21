@@ -1,0 +1,13 @@
+service:
+  name: record-service
+
+discovery:
+  backend:
+    host: localhost
+    port: 6379
+    key: discovery-records
+
+server:
+  host: localhost
+  port: 8006
+  root: /api

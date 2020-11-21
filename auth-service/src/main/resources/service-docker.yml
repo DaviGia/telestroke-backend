@@ -1,0 +1,14 @@
+discovery:
+  native:
+    docker: true
+  backend:
+    host: redis
+
+server:
+  host: 0.0.0.0
+
+redis:
+  host: redis
+
+mongodb:
+  connection_string: mongodb://demo:demo@mongo:27017/stroke-data

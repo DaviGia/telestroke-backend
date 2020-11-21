@@ -1,0 +1,3 @@
+rootProject.name = 'backend'
+include 'common', 'mongo-common'
+include 'auth-service', 'gateway', 'session-service', 'registry-service', 'peer-service', 'record-service', 'peerjs-server'

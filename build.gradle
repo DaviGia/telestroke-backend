@@ -1,0 +1,119 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+plugins {
+  id 'org.jetbrains.kotlin.jvm' version '1.3.61'
+  id 'com.github.johnrengelman.shadow' version '5.2.0'
+  id 'com.bmuschko.docker-remote-api' version '6.1.3'
+}
+
+group = 'it.unibo'
+version = '1.0.0-SNAPSHOT'
+
+ext {
+  kotlinVersion = '1.3.20'
+  vertxVersion = '3.8.5'
+  jacksonVersion = '2.10.2'
+  slf4jVersion = '1.7.21'
+  log4jVersion = '2.13.0'
+  logbackVersion = '1.2.2'
+  groovyVersion = '2.5.8'
+  junitJupiterEngineVersion = '5.4.0'
+}
+
+allprojects {
+  repositories {
+    mavenCentral()
+    jcenter()
+    gradlePluginPortal()
+  }
+}
+
+subprojects {
+  apply plugin: 'org.jetbrains.kotlin.jvm'
+  apply plugin: 'application'
+  apply plugin: 'com.github.johnrengelman.shadow'
+  apply plugin: 'com.bmuschko.docker-remote-api'
+
+  application {
+    mainClassName = 'io.vertx.core.Launcher'
+  }
+
+  def watchForChange = 'src/**/*'
+  def doOnChange = './gradlew classes'
+
+  dependencies {
+    implementation "io.vertx:vertx-web:$vertxVersion"
+    implementation "io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion"
+    implementation "io.vertx:vertx-lang-kotlin:$vertxVersion"
+
+    // Logging
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+    implementation "org.codehaus.groovy:groovy:$groovyVersion"
+
+    testImplementation "io.vertx:vertx-junit5:$vertxVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
+  }
+
+  compileKotlin {
+    kotlinOptions.jvmTarget = '1.8'
+  }
+
+  compileTestKotlin {
+    kotlinOptions.jvmTarget = '1.8'
+  }
+
+  test {
+    useJUnitPlatform()
+    testLogging {
+      events 'PASSED', 'FAILED', 'SKIPPED'
+    }
+  }
+
+  //ignore
+  afterEvaluate {
+    if (project.hasProperty("mainVerticleName")) {
+
+      shadowJar {
+        archiveClassifier = ''
+        manifest {
+          attributes 'Main-Verticle': mainVerticleName
+        }
+        mergeServiceFiles {
+          include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+        }
+      }
+
+      task buildImage(type: DockerBuildImage) {
+        dependsOn shadowJar
+        inputDir = project.projectDir
+        dockerFile = file("${project.projectDir}/Dockerfile")
+        buildArgs.put('VERTICLE_FILE', shadowJar.archiveFileName)
+        images.add("it.unibo/${project.name}:latest")
+      }
+
+      run {
+        args = ['run', mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+      }
+    }
+    
+    //build docker image if the module has buildDockerImage property
+    if (project.hasProperty("buildDockerImage") && project.buildDockerImage) {
+
+      task buildImage(type: DockerBuildImage) {
+        inputDir = project.projectDir
+        dockerFile = file("${project.projectDir}/Dockerfile")
+        images.add("it.unibo/${project.name}:latest")
+      }
+
+    }
+  }
+}
+
+//task to create jars and move all into a specific folder
+task makeDist(type: Copy, dependsOn: subprojects.shadowJar) {
+  delete "$rootDir/dist"
+  from subprojects.shadowJar
+  into project.file('dist')
+}

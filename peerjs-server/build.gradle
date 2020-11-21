@@ -1,0 +1,4 @@
+version = '1.1.0'
+
+//signal gradle to build this module as docker image
+ext.buildDockerImage = true

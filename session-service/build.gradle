@@ -1,0 +1,17 @@
+version = '1.1.0'
+
+ext {
+  mainVerticleName = 'it.unibo.telestroke.session.SessionVerticle'
+}
+
+dependencies {
+  implementation project(':common')
+  implementation project(':mongo-common')
+
+  implementation "io.vertx:vertx-auth-jwt:$vertxVersion"
+
+  implementation "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
+  implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
+  implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+  implementation "org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion"
+}

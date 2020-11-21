@@ -1,0 +1,17 @@
+version = '1.1.0'
+
+dependencies {
+  api "io.vertx:vertx-config:$vertxVersion"
+  api "io.vertx:vertx-config-yaml:$vertxVersion"
+  api "io.vertx:vertx-config-kubernetes-configmap:$vertxVersion"
+
+  api "io.vertx:vertx-service-discovery:$vertxVersion"
+  api "io.vertx:vertx-service-discovery-backend-redis:$vertxVersion"
+  api "io.vertx:vertx-service-discovery-bridge-kubernetes:$vertxVersion"
+
+  api "io.vertx:vertx-health-check:$vertxVersion"
+
+  api "io.vertx:vertx-web-client:$vertxVersion"
+
+  api "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+}

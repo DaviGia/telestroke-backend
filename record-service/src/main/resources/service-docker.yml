@@ -1,0 +1,11 @@
+discovery:
+  native:
+    docker: true
+  backend:
+    host: redis
+
+server:
+  host: 0.0.0.0
+
+redis:
+  host: redis

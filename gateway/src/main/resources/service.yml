@@ -1,0 +1,40 @@
+service:
+  name: gateway
+
+discovery:
+  backend:
+    host: localhost
+    port: 6379
+    key: discovery-records
+
+server:
+  host: 0.0.0.0
+  port: 8001
+  root: /api
+#  options: # enable for https
+#    ssl: true
+#    pemKeyCertOptions:
+#      certPath: certificates/cert.pem
+#      keyPath: certificates/key.pem
+
+auth:
+  ignoreRoutes:
+    - /api/auth/login
+    - /api/auth/register
+    - /api/auth/refresh
+
+gateway:
+  routes:
+    - id: auth
+      serviceName: auth-service
+    - id: stroke
+      serviceName: session-service
+    - id: peer
+      serviceName: peer-service
+    - id: record
+      serviceName: record-service
+
+redis:
+  host: localhost
+  port: 6379
+  select: 1 #use another db to store tokens
