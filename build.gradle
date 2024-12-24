@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'it.unibo'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
 
 ext {
   kotlinVersion = '1.3.20'
@@ -90,7 +90,7 @@ subprojects {
         inputDir = project.projectDir
         dockerFile = file("${project.projectDir}/Dockerfile")
         buildArgs.put('VERTICLE_FILE', shadowJar.archiveFileName)
-        images.add("it.unibo/${project.name}:latest")
+        images.add("it.unibo/${project.name}:${project.version}")
       }
 
       run {
@@ -104,7 +104,7 @@ subprojects {
       task buildImage(type: DockerBuildImage) {
         inputDir = project.projectDir
         dockerFile = file("${project.projectDir}/Dockerfile")
-        images.add("it.unibo/${project.name}:latest")
+        images.add("it.unibo/${project.name}:${project.version}")
       }
 
     }
