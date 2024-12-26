@@ -1,4 +1,4 @@
-FROM mongo
+FROM mongo:4.4
 
 # import base data
 COPY ./backup/*.json ./

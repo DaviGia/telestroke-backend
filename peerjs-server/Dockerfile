@@ -1,4 +1,4 @@
-FROM peerjs/peerjs-server
+FROM peerjs/peerjs-server:0.6.1
 
 EXPOSE 9000
 

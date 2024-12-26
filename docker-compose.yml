@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   gateway:
-    image: it.unibo/gateway
+    image: it.unibo/gateway:${backend_version}
     container_name: gateway
     ports:
       - "8001:8001"
@@ -13,7 +11,7 @@ services:
     restart: on-failure
 
   registry-service:
-    image: it.unibo/registry-service
+    image: it.unibo/registry-service:${backend_version}
     container_name: registry-service
     environment:
       VERTX_PROFILE: ${profile:-docker}
@@ -22,7 +20,7 @@ services:
     restart: on-failure
 
   auth-service:
-    image: it.unibo/auth-service
+    image: it.unibo/auth-service:${backend_version}
     container_name: auth-service
     environment:
       VERTX_PROFILE: ${profile:-docker}
@@ -32,7 +30,7 @@ services:
     restart: on-failure
 
   peer-service:
-    image: it.unibo/peer-service
+    image: it.unibo/peer-service:${backend_version}
     container_name: peer-service
     environment:
       VERTX_PROFILE: ${profile:-docker}
@@ -42,7 +40,7 @@ services:
     restart: on-failure
 
   session-service:
-    image: it.unibo/session-service
+    image: it.unibo/session-service:${backend_version}
     container_name: session-service
     environment:
       VERTX_PROFILE: ${profile:-docker}
@@ -52,7 +50,7 @@ services:
     restart: on-failure
 
   record-service:
-    image: it.unibo/record-service
+    image: it.unibo/record-service:${backend_version}
     container_name: record-service
     environment:
       VERTX_PROFILE: ${profile:-docker}
@@ -61,27 +59,29 @@ services:
     restart: on-failure
 
   peerjs-server:
-    image: it.unibo/peerjs-server
+    image: it.unibo/peerjs-server:${backend_version}
     container_name: peerjs-server
     ports:
       - "9000:9000"
     restart: on-failure
 
   frontend:
-    image: it.unibo/frontend
+    image: it.unibo/frontend:${frontend_version}
     container_name: frontend
     depends_on:
       - gateway
     ports:
       - "8080:80"
     restart: on-failure
+    volumes:
+      - ./docker/frontend-config.json:/usr/share/nginx/html/assets/config/config.prod.json
 
   redis:
     image: redis:5.0-alpine
     container_name: redis
 
   mongo:
-    image: mongo
+    image: mongo:4.4
     container_name: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
